@@ -1,0 +1,23 @@
+# Entornos y cachés
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.env
+.env.*
+!.env.example
+
+# Archivos locales del editor y del sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Archivos comprimidos y temporales
+*.zip
+*.tmp
+
+# NOTA: chroma_db/ NO se ignora: el notebook limpio necesita esa base.
+# Revisar tamaño, bloqueos y permisos de distribución antes de subirla.
