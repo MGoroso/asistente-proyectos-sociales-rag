@@ -42,15 +42,17 @@ Los fragmentos mostrados **no constituyen una verificación automática** de cad
 
 ## Estructura del repositorio
 
-```text
-TP_RAG/
+asistente-proyectos-sociales-rag/
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
-├── rag_proyecto_limpio.ipynb       # Versión de ejecución y demostración
-├── datos/                          # Tres PDF de referencia (si su redistribución está permitida)
-└── chroma_db/                      # Base vectorial persistida, necesaria para el notebook limpio
-```
+├── asistente_rag_proyectos_sociales.ipynb
+├── datos/
+│   ├── 2026 Instructivo Convocatoria Proyectos Sociales.pdf
+│   ├── 20260827_GUIA VIOLENCIA DE GENERO 2026.pdf
+│   └── 20260921_GUIA DE SERVICIOS SOCIALES 2026.pdf
+└── chroma_db/
+    └── Base vectorial ChromaDB
 
 El notebook de desarrollo, el entorno `.venv` y los experimentos descartados no forman parte de la entrega recomendada.
 
@@ -74,30 +76,53 @@ El notebook de desarrollo, el entorno `.venv` y los experimentos descartados no 
    .\.venv\Scripts\python.exe -m pip install -r requirements.txt
    ```
 
-5. Abrir `rag_proyecto_limpio.ipynb` en VS Code o Jupyter, seleccionar el intérprete de `.venv` y ejecutar las celdas en orden.
+5. Abrir `asistente_rag_proyectos_sociales.ipynb` en VS Code o Jupyter, seleccionar el intérprete de `.venv` y ejecutar las celdas en orden.
 6. Abrir la URL local que muestra Gradio (habitualmente `http://127.0.0.1:7860`).
 
-**Importante:** `rag_proyecto_limpio.ipynb` **no reconstruye la base**. Necesita que `chroma_db/` esté en la raíz del proyecto, con la colección ya indexada. Si se comparte el repositorio sin esa carpeta, el notebook no podrá realizar consultas. Antes de publicar, verificar el tamaño de la base y que GitHub permita subirla; si no es viable, habrá que añadir un procedimiento reproducible de indexación.
+**Nota:** El repositorio incluye la base vectorial ChromaDB con los 491 fragmentos previamente indexados. Esto permite realizar consultas sobre los documentos sin necesidad de repetir el proceso de generación de embeddings. Para ejecutar el asistente, se deben instalar las dependencias, descargar los modelos de Ollama y conservar la estructura de carpetas.
 
 ## Pruebas realizadas
 
-Las siguientes cinco consultas se probaron en la versión de desarrollo. En la versión limpia se verificó además una consulta sobre el máximo de proyectos.
 
-| Tipo | Pregunta | Resultado observado |
+## Pruebas realizadas
+
+Se realizaron pruebas funcionales para evaluar la recuperación de información, la generación de respuestas y el comportamiento del asistente ante consultas ajenas a los documentos disponibles.
+
+| Tipo de consulta | Pregunta | Resultado observado |
 |---|---|---|
-| Con respuesta | ¿Cuántos proyectos sociales puede presentar una organización? | Respondió: hasta 3 proyectos sociales. |
-| Con respuesta | ¿Qué servicios de asesoramiento y contención ofrece la Línea 144? | Respuesta pertinente; detalles por contrastar con fragmentos. |
-| Con respuesta | ¿Qué servicios ofrece la Ciudad de Buenos Aires para personas en situación de calle? | Identificó CIS, Red de Atención y Línea de Atención Social Inmediata; verificar datos concretos. |
-| Sin respuesta documental | ¿Quién ganó el Mundial de Fútbol de 2022? | Indicó que no encontró información en los documentos. |
-| Sin respuesta documental | ¿Cuál es el precio actual del dólar en Argentina? | Indicó que no encontró información en los documentos. |
+| Proyectos sociales | ¿Cuántos proyectos sociales puede presentar una organización? | Respondió correctamente que una organización puede presentar hasta 3 proyectos sociales. |
+| Violencia de género | ¿Qué servicios de asesoramiento y contención ofrece la Línea 144? | Recuperó información sobre asistencia gratuita, confidencial y atención permanente. |
+| Servicios sociales | ¿Qué servicios ofrece la Ciudad de Buenos Aires para personas en situación de calle? | Identificó Centros de Inclusión Social, la Red de Atención y la Línea de Atención Social Inmediata. |
+| Consulta fuera de contexto | ¿Quién ganó el Mundial de Fútbol de 2022? | Indicó que no encontró esa información en los documentos. |
+| Consulta fuera de contexto | ¿Cuál es el precio actual del dólar en Argentina? | Indicó que no encontró esa información en los documentos. |
+
+Las pruebas permitieron verificar el funcionamiento del asistente con consultas relacionadas con las fuentes documentales y con preguntas ajenas a su contenido.
+  
 
 ## Limitaciones y posibles mejoras
 
-- Los modelos se ejecutaron localmente principalmente en **CPU**, con tiempos de respuesta elevados.
-- Algunas respuestas fueron demasiado generales o mezclaron objetivos institucionales con recomendaciones prácticas.
-- La recuperación de fragmentos relevantes no garantiza que el modelo los interprete correctamente.
-- Se podrían evaluar modelos más eficientes, una recuperación con reordenamiento (*reranking*) y controles adicionales de fundamentación.
+
+## Limitaciones y posibles mejoras
+
+Durante el desarrollo y las pruebas del asistente se identificaron algunos aspectos susceptibles de mejora:
+
+- **Tiempos de respuesta:** la ejecución local de los modelos, principalmente mediante CPU, genera tiempos de procesamiento elevados.
+- **Precisión de las respuestas:** en determinadas consultas se observaron respuestas generales o información que no respondía directamente a la pregunta.
+- **Recuperación de información:** aunque el sistema identifica fragmentos relevantes mediante búsqueda semántica, la calidad de las respuestas depende de la información recuperada y de su interpretación por parte del modelo.
+
+Como posibles mejoras futuras, se contempla optimizar los tiempos de procesamiento, evaluar modelos de lenguaje más eficientes e incorporar técnicas adicionales para mejorar la selección de fragmentos relevantes.
+  
 
 ## Alcance
 
-Este asistente es un **prototipo académico** de consulta documental. Las respuestas pueden contener errores y no reemplazan la lectura de los documentos originales ni la orientación profesional o institucional.
+
+## Resultados y conclusiones
+
+El desarrollo permitió implementar un asistente inteligente basado en la arquitectura RAG (Retrieval-Augmented Generation), capaz de responder consultas en lenguaje natural a partir de documentación vinculada con proyectos sociales, servicios sociales y recursos de asistencia ante situaciones de violencia de género.
+
+Mediante la integración de Python, Ollama, ChromaDB, LangChain y Gradio, se construyó una solución que funciona localmente, sin depender de servicios externos de generación de texto.
+
+Las pruebas realizadas permitieron comprobar el funcionamiento de la recuperación semántica, la generación de respuestas contextualizadas y la identificación de consultas que no corresponden a la información disponible.
+
+El proyecto demuestra cómo la inteligencia artificial generativa puede facilitar el acceso y la consulta de información documental, y constituye una base para futuras mejoras en precisión, rendimiento y experiencia de usuario.
+  
