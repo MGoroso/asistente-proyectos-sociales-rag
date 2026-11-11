@@ -106,8 +106,12 @@ Durante el desarrollo y las pruebas del asistente se identificaron algunos aspec
 - **Precisión de las respuestas:** en determinadas consultas se observaron respuestas generales o información que no respondía directamente a la pregunta.
 - **Recuperación de información:** aunque el sistema identifica fragmentos relevantes mediante búsqueda semántica, la calidad de las respuestas depende de la información recuperada y de su interpretación por parte del modelo.
 
-Como posibles mejoras futuras, se contempla optimizar los tiempos de procesamiento, evaluar modelos de lenguaje más eficientes e incorporar técnicas adicionales para mejorar la selección de fragmentos relevantes.
-  
+Como posibles mejoras futuras, se contempla optimizar los tiempos de procesamiento, evaluar modelos de lenguaje más eficientes e 
+incorporar técnicas adicionales para mejorar la selección de fragmentos relevantes.
+
+  ## Uso de herramientas de inteligencia artificial
+
+Durante el desarrollo del proyecto utilicé ChatGPT como herramienta de apoyo para comprender conceptos, desarrollar y revisar código, resolver errores y elaborar la documentación.
 
 ## Resultados y conclusiones
 
